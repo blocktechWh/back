@@ -1,0 +1,96 @@
+@charset "UTF-8";
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: sans-serif;
+}
+#root{
+	height: 100%;
+}
+#root > div{
+	height: 100%;
+}
+
+.persoal-Info>.ant-popover-title {
+
+}
+
+.module-search {
+	padding-left: 2px;
+	margin-bottom: 15px;
+	height: 55px;
+	line-height: 30px;
+	width: 95%;
+	.module-search-left {
+		float: left;
+		width: 95%;
+		height: 30px;
+		margin:0px!important;
+		.ant-btn{
+			float: left;
+			margin-left:10px;
+			width:80px;
+		}
+	}
+
+	.module-search-right {
+		float: right;
+		margin-top:10px;
+		width: 95%;
+		.ant-btn{
+			float: right;
+			margin-left:10px;
+			margin-right: 10px;
+			width:80px
+		}
+		.ant-input{
+			float: right;
+			width: 200px;
+			margin-left:10px
+		}
+		.ant-select{
+			float: right;
+			width: 200px;
+			margin-left:10px
+		}
+		.ant-calendar-picker{
+			width: 400px;
+		}
+
+
+	}
+
+	.module-table {
+		padding-left: 5px;
+		
+		margin-bottom: 15px;
+		height: 30px;
+		line-height: 30px;
+	}
+}
+.ant-layout-content{
+    height: auto !important;
+    min-height: 600px;
+  
+}
+
+.ant-table-pagination{
+    float: left !important; 
+    margin-left: 20px !important;
+}
+.ssr{
+    background: yellow;
+}
+.ant-table-row:nth-of-type(odd){
+    background: red;
+}
+.ant-table-row:nth-of-type(even){
+    background: yellow;
+}
+.ant-table-row:active{
+    background: #000;
+}
+.module-search .module-search-right .ant-input{
+    width: auto;
+}
