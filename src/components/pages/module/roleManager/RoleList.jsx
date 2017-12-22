@@ -1,6 +1,8 @@
 import React from 'react';
 import { Table, Modal,Button , message,Popconfirm,Select,Input,DatePicker } from 'antd';
 import {getAllRoles} from '../../../../axios';
+import  FormWithModal  from './RoleEditModal';
+
 const RangePicker = DatePicker.RangePicker;
 export default class RoleList extends React.Component {
     state = {
@@ -51,7 +53,45 @@ export default class RoleList extends React.Component {
          this.state.pageParms[dataField]= value;
          this.setState({});
     }
-
+	
+	handleCollect(edtingUserData) {
+		console.log("edtingUserData id "+edtingUserData.id),
+        
+        this.setState({
+            visible: true,
+            
+            edtingUserData
+        });
+    }
+	
+	handleCancel = (e) => {
+        this.setState({
+            visible: false,
+        });
+    }
+	
+	handleOk = (e) => {
+        console.log(e);
+        this.setState({ loading: true });
+        let filedsValue=this.form.getFieldsValue();
+        getAllRoles({id:this.state.edtingUserData.id,...filedsValue}).then( res => {
+            let list = [];
+            if(res.code === '000'){
+                this.setState({
+                    visible: false,
+                    loading: false
+                });
+                this.fetchData(0, 10);
+                message.success('分配权限成功！');
+            }
+            else {
+                this.setState({
+                    loading: false
+                });
+                message.error(res.msg);
+            }
+        });
+    }
     onDateChange(dates, dateStrings) {
         console.log('From: ', dates[0], ', to: ', dates[1]);
         console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
@@ -100,8 +140,12 @@ export default class RoleList extends React.Component {
                         <Input placeholder="接受者名称"  onChange={this.handleSelectChange.bind(that,"receiveName")}/>
                     </div>
                 </div>
+				
+				<FormWithModal  visible={this.state.visible}  edtingUserData={this.state.edtingUserData} ref={this.saveFormRef}  handleCancel={this.handleCancel}
+		 		handleCreate={this.handleOk.bind(this)} />
+              
 
-                <div className="module-table" >
+			  <div className="module-table" >
                     <Table
                         ref="table"
                         columns={columns}
