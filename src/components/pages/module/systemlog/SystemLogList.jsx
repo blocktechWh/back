@@ -6,16 +6,23 @@ import  SystemLogEditModal  from './SystemLogEditModal';
 export default class User extends React.Component {
     state = {
         data: [],
-        pagination: {},
+        pagination: {
+	       	showTotal:total => `共 ${total} 条`,
+	      	showSizeChanger: true,
+		    showQuickJumper:true,	
+		 	total:50,
+		    onShowSizeChange: (current, pageSize) => {},
+		    defaultPageSize:false,   	
+        },
         loading: false,
         pageParms: {},
         edtingUserData:{}
     }
 
-    fetchData(offset){
+    fetchData(offset,pageSize){
         this.setState({ loading: true });
         let pageParms=this.state.pageParms;
-        users(offset,10,pageParms).then( res => {
+        users(offset,pageSize,pageParms).then( res => {
             let list = [];
             const pagination = { ...this.state.pagination };
             if(res.code === '000' && res.data &&  res.data.list){

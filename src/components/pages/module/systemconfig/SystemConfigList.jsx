@@ -6,16 +6,23 @@ import  SystemConfigModal  from './SystemConfigModal';
 export default class User extends React.Component {
     state = {
         data: [],
-        pagination: {},
+        pagination: {
+	       	showTotal:total => `共 ${total} 条`,
+	      	showSizeChanger: true,
+		    showQuickJumper:true,	
+		 	total:50,
+		    onShowSizeChange: (current, pageSize) => {},
+		    defaultPageSize:false,   	
+        },
         loading: false,
         pageParms: {},
         edtingUserData:{}
     }
 
-    fetchData(offset){
+    fetchData(offset,pageSize){
         this.setState({ loading: true });
         let pageParms=this.state.pageParms;
-        systemConfList(offset,10,pageParms).then( res => {
+        systemConfList(offset,pageSize,pageParms).then( res => {
             let list = [];
             const pagination = { ...this.state.pagination };
             if(res.code === '000' && res.data &&  res.data.list){
@@ -148,11 +155,14 @@ export default class User extends React.Component {
 
         return (
             <div>
+         
+                    
                 <div className="module-search">
                     <div className="module-search-right" >
                         <Button type="primary" icon="search"  onClick={this.search.bind(this,{})}>查询</Button>
                         <Input placeholder="说明"   onChange={this.handleSelectChange.bind(that,"remark")}/>
                         <Input placeholder="名字（key）"   onChange={this.handleSelectChange.bind(that,"keyName")}/>
+                        
                     </div>
                     <div className="module-search-left">
                         <Button type="primary" onClick={this.handleCollect.bind(this,{})}>新增</Button>

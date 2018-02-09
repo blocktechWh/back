@@ -1,12 +1,20 @@
 import React from 'react';
-import { Table, Modal,Button , message,Popconfirm,Select,Input } from 'antd';
+import { Table, Modal,Button , message,Popconfirm,Select,Input ,Pagination} from 'antd';
 import { fontUsersName,addUsers ,updateStatus,deletesUser} from '../../../../axios';
 import  FormWithModal  from './UserEditModal.jsx';
 import { formatTime } from '../../../../utils/FormatUtils.js';
 export default class User extends React.Component {
-    state = {
+ 
+   state = {
         data: [],
-        pagination: {},
+        pagination: {
+	       	showTotal:total => `共 ${total} 条`,
+	      	showSizeChanger: true,
+		    showQuickJumper:true,	
+		 	total:50,
+		    onShowSizeChange: (current, pageSize) => {},
+		    defaultPageSize:false,   	
+        },
         loading: false,
         pageParms: {},
         edtingUserData:{}
@@ -14,16 +22,21 @@ export default class User extends React.Component {
 
     fetchData(offset,pageSize,sortField,sortOrder){
         this.setState({ loading: true });
+        
         let pageParms=this.state.pageParms;
-        fontUsersName(offset,10,sortField,sortOrder).then( res => {
+        fontUsersName(offset,pageSize,sortField,sortOrder).then( res => {
             let list = [];
+          
+            let totals=res.data.total;	
             const pagination = { ...this.state.pagination };
             if(res.code === '000' && res.data &&  res.data.list){
+            
                 res.data.list.map((item,index)=>{
                     return item.key = index;
-                });
+                }); 
                 list = res.data.list;
                 pagination.total = res.data.total;
+               
             }
             this.setState({
                 visible: false,
@@ -42,7 +55,8 @@ export default class User extends React.Component {
 		console.log(sorter)
 		
         this.setState({ pagination: pagination});
-        this.fetchData(0,10,sorter.field,sorter.order == "ascend"?true : false);
+//      this.fetchData(0,10,sorter.field,sorter.order == "ascend"?true : false);
+        this.fetchData(pagination.current,pagination.pageSize,sorter.field,sorter.order == "ascend"?true : false);
     }
 
     handleOk = (e) => {
@@ -97,7 +111,7 @@ export default class User extends React.Component {
                 this.setState({
                     loading: false
                 });
-                this.fetchData(0, 10);
+                this.fetchData(0,10);
             }
             else {
                 message.error(res.msg);
@@ -135,8 +149,7 @@ export default class User extends React.Component {
 
     render() {
         let that=this;
-		//let {sortedInfo } = this.state;
-		//sortedInfo = sortedInfo || {};
+		console.log(this)
         const columns = [{
             title: '姓名',
             dataIndex: 'name',
@@ -146,43 +159,33 @@ export default class User extends React.Component {
             {
             title: '手机号',
             dataIndex: 'phone',
+            sorter:true,
         },  {
                 title: '性别',
                 dataIndex: 'sex',
                 render: text => text===1?<div>男</div>:<div>女</div>,
-            },{
-                title: '邮件',
-                dataIndex: 'email',
-            },
-            /**{
-            title: '会员状态',
-            dataIndex: 'status',
-            render: text => text==='y'?<div>正常</div>:<div>禁用</div>,
-        },**/{
+                sorter:true,
+           },
+        ,
+        {
             title: '注册时间',
             dataIndex: 'createTime',
 			render:time=>formatTime(new Date(time)),
 			sorter:true,
+			sorter:true,
         },{
             title: '最后状态时间',
-            dataIndex: 'updateTimeString'
+            dataIndex: 'updateTimeString',
+            sorter:true,
         }
-            /**,{
-            title: '操作',
-            key: 'operation',
-            render(userData, item) {
-                let edit = <a href="javascript:void(0);" onClick={function(){that.handleCollect(userData)}}>编辑</a>;
-                let deleteUserDiv =
-                    <Popconfirm placement="topRight" title="确认要删除吗？" onConfirm={function(){that.deleteUser(userData)}} okText="确认" cancelText="取消">
-                        <a href="javascript:void(0);">删除</a>
-                    </Popconfirm>;
-                let statusBut = <a href="javascript:void(0);" onClick={function(){that.chageStatus(userData)}}>{(userData.status==="y"?'禁用':"启用")}</a>;
-                return <div> {edit} {statusBut} {userData.id!==1?deleteUserDiv:null}</div>
-            }
-        }**/];
+
+        ];
 
         const { data } = this.state;
 
+  
+
+		
         return (
             <div>
                 <div className="module-search">
@@ -204,7 +207,7 @@ export default class User extends React.Component {
                <FormWithModal  visible={this.state.visible} ref={this.saveFormRef}  handleCancel={this.handleCancel}
                                handleCreate={this.handleOk.bind(this)} />
 
-                <div className="module-table">
+                <div className="module-table">                
                     <Table
                         ref="table"
                         columns={columns}
@@ -212,10 +215,16 @@ export default class User extends React.Component {
                         bordered
                         loading={this.state.loading}
                         pagination={this.state.pagination}
-                        onChange={this.handleTableChange.bind(this)}/>
+                        onChange={this.handleTableChange.bind(this)} 
+                      
+				      />
+				
+ 					
                 </div>
             </div>
         )
     }
+
 }
+
 

@@ -1,20 +1,27 @@
 import React from 'react';
 import { Table, Modal,Button , message,Popconfirm,Select,Input,DatePicker } from 'antd';
-import {getAllVotes} from '../../../../axios';
+import {fontUsers1} from '../../../../axios';
 const RangePicker = DatePicker.RangePicker;
 export default class VoteList extends React.Component {
     state = {
         data: [],
-        pagination: {},
+        pagination: {
+	       	showTotal:total => `共 ${total} 条`,
+	      	showSizeChanger: true,
+		    showQuickJumper:true,	
+		 	total:50,
+		    onShowSizeChange: (current, pageSize) => {},
+		    defaultPageSize:false,   	
+        },
         loading: false,
         pageParms: {},
         edtingUserData:{}
     }
 
-    fetchData(offset){
+    fetchData(offset,pageSize){
         this.setState({ loading: true });
         let pageParms=this.state.pageParms;
-        getAllVotes(offset,10,pageParms).then( res => {
+        fontUsers1(offset,pageSize,pageParms).then( res => {
             let list = [];
             const pagination = { ...this.state.pagination };
             if(res.code === '000' && res.data &&  res.data.list){
@@ -62,19 +69,19 @@ export default class VoteList extends React.Component {
     render() {
         let that=this;
         const columns = [{
-            title: '创建者',
-            dataIndex: 'name',
+            title: '发送者',
+            dataIndex: 'sendName',
             render: text => <a>{text}</a>,
         },  {
-            title: '投票主题',
-            dataIndex: 'subject',
+            title: '接收者',
+            dataIndex: 'receiveName',
         },{
-                title: '状态',
-                dataIndex: 'state',
+                title: '发送金额',
+                dataIndex: 'giftAmount',
             },
             {
             title: '时间',
-            dataIndex: 'createTime'
+            dataIndex: 'createTimeString'
         }];
 
         const { data } = this.state;
@@ -104,4 +111,3 @@ export default class VoteList extends React.Component {
         )
     }
 }
-

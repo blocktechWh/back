@@ -4,6 +4,7 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: sans-serif;
+	min-width: 1360px;
 }
 #root{
 	height: 100%;
@@ -18,7 +19,7 @@ body {
 
 .module-search {
 	padding-left: 2px;
-	margin-bottom: 15px;
+//	margin-bottom: 15px;
 	height: 55px;
 	line-height: 30px;
 	width: 95%;
@@ -80,17 +81,48 @@ body {
     margin-left: 20px !important;
 }
 .ssr{
-    background: yellow;
+    background: #ebf6fc;
 }
 .ant-table-row:nth-of-type(odd){
-    background: red;
+    background: #fff;
 }
 .ant-table-row:nth-of-type(even){
-    background: yellow;
+    background: #f5f5f5;
 }
-.ant-table-row:active{
-    background: #000;
+//.ant-table-row:active{
+//  background: #000;
+//}
+.module-search .module-search-right{
+    width: auto !important;
+    float: left !important;
+   
+}
+
+.module-search .module-search-left .ant-btn{
+    margin-top:10px !important;
+}
+.module-search .module-search-left{
+    width: auto !important;
 }
 .module-search .module-search-right .ant-input{
     width: auto;
+}
+.ant-table-thead > tr > th, .ant-table-tbody > tr > td{
+    padding: 3px 8px !important;
+}
+.ant-layout-header {
+    background: #404040;
+     padding: 0 !important; 
+    height: 50px !important;
+    line-height: 50px !important;
+}
+//调整系统配置的样式
+//.ant-spin-nested-loading > div > .ant-spin{
+//  position: relative !important;
+//}
+.anticon-caret-down{
+    font-size: 18px !important;
+}
+.anticon-caret-up{
+    font-size: 18px !important;
 }
